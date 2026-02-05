@@ -11,13 +11,15 @@ class LottoGenerator extends HTMLElement {
       <style>
         .wrapper {
           text-align: center;
-          background-color: #2c2c31;
+          background-color: var(--card-background-color); /* Changed to CSS variable */
           padding: 2rem;
           border-radius: 15px;
           box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+          transition: background-color 0.3s ease, color 0.3s ease;
+          border: 1px solid var(--card-border-color);
         }
         h1 {
-          color: var(--primary-color);
+          color: var(--primary-text-color); /* Changed to CSS variable */
           margin-bottom: 1.5rem;
         }
         .numbers {
@@ -33,26 +35,27 @@ class LottoGenerator extends HTMLElement {
           width: 50px;
           height: 50px;
           background-color: var(--accent-color);
-          color: white;
+          color: var(--button-text-color); /* Changed to CSS variable */
           border-radius: 50%;
           font-size: 1.5rem;
           font-weight: bold;
           box-shadow: 0 0 10px var(--accent-color);
+          transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
         button {
-          background-color: var(--accent-color);
-          color: white;
+          background-color: var(--button-background-color); /* Changed to CSS variable */
+          color: var(--button-text-color); /* Changed to CSS variable */
           border: none;
           padding: 1rem 2rem;
           font-size: 1rem;
           border-radius: 8px;
           cursor: pointer;
-          transition: background-color 0.3s, box-shadow 0.3s;
-          box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+          transition: background-color 0.3s, box-shadow 0.3s, color 0.3s ease;
+          box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); /* This might need adjustment with a variable */
         }
         button:hover {
-          background-color: #45a049;
-          box-shadow: 0 0 25px rgba(76, 175, 80, 0.8);
+          background-color: var(--accent-color); /* Hover effect using accent */
+          box-shadow: 0 0 25px var(--accent-color); /* Adjusted shadow for hover */
         }
       </style>
       <div class="wrapper">
@@ -84,3 +87,39 @@ class LottoGenerator extends HTMLElement {
 }
 
 customElements.define('lotto-generator', LottoGenerator);
+
+// Theme switching logic
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme');
+
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleButton.textContent = 'Toggle Light Mode';
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggleButton.textContent = 'Toggle Dark Mode';
+        }
+        localStorage.setItem('theme', theme);
+    };
+
+    const toggleTheme = () => {
+        const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+        applyTheme(newTheme);
+    };
+
+    // Apply theme on load
+    if (currentTheme) {
+        applyTheme(currentTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // System preference is dark, set dark mode
+        applyTheme('dark');
+    } else {
+        // Default to light mode if no preference found
+        applyTheme('light');
+    }
+
+    themeToggleButton.addEventListener('click', toggleTheme);
+});
+
