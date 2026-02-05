@@ -127,10 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let disqusLoaded = false;
     loadCommentsButton.addEventListener('click', () => {
         if (!disqusLoaded) {
-            // Create disqus_thread div
+            const disqusWrapper = document.getElementById('disqus-wrapper');
+            // Create disqus_thread div inside disqus-wrapper
             const disqusThreadDiv = document.createElement('div');
             disqusThreadDiv.id = 'disqus_thread';
-            loadCommentsButton.parentNode.insertBefore(disqusThreadDiv, loadCommentsButton.nextSibling);
+            disqusWrapper.appendChild(disqusThreadDiv);
 
             // Configure Disqus
             window.disqus_config = function () {
