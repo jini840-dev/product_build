@@ -91,7 +91,6 @@ customElements.define('lotto-generator', LottoGenerator);
 // Theme switching logic and Disqus dynamic loading
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggleButton = document.getElementById('theme-toggle');
-    const loadCommentsButton = document.getElementById('load-comments-button');
     const currentTheme = localStorage.getItem('theme');
 
     const applyTheme = (theme) => {
@@ -123,32 +122,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     themeToggleButton.addEventListener('click', toggleTheme);
 
-    // Disqus dynamic loading logic
-    let disqusLoaded = false;
-    loadCommentsButton.addEventListener('click', () => {
-        if (!disqusLoaded) {
-            const disqusWrapper = document.getElementById('disqus-wrapper');
-            // Create disqus_thread div inside disqus-wrapper
-            const disqusThreadDiv = document.createElement('div');
-            disqusThreadDiv.id = 'disqus_thread';
-            disqusWrapper.appendChild(disqusThreadDiv);
+    // Function to load Disqus
+    const loadDisqus = () => {
+        const disqusWrapper = document.getElementById('disqus-wrapper');
+        const disqusThreadDiv = document.createElement('div');
+        disqusThreadDiv.id = 'disqus_thread';
+        disqusWrapper.appendChild(disqusThreadDiv);
 
-            // Configure Disqus
-            window.disqus_config = function () {
-                this.page.url = window.location.href;
-                this.page.identifier = 'lotto-generator-page';
-                this.page.title = document.title;
-            };
+        // Configure Disqus
+        window.disqus_config = function () {
+            this.page.url = window.location.href;
+            this.page.identifier = 'lotto-generator-page';
+            this.page.title = document.title;
+        };
 
-            // Load Disqus script
-            const d = document, s = d.createElement('script');
-            s.src = 'https://product-build-2.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
+        // Load Disqus script
+        const d = document, s = d.createElement('script');
+        s.src = 'https://product-build-2.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    };
 
-            disqusLoaded = true;
-            loadCommentsButton.style.display = 'none'; // Hide button after loading
-        }
-    });
+    // Load Disqus automatically on page load
+    loadDisqus();
 });
 
