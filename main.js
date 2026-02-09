@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.page.url = window.location.href;
             this.page.identifier = 'lotto-generator-page';
             this.page.title = document.title;
+            this.page.shortname = 'product-build-2'; // Added shortname
         };
 
         // Load Disqus script
